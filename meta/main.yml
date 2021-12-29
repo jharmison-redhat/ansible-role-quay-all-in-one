@@ -1,0 +1,19 @@
+---
+galaxy_info:
+  author: James Harmison
+  description: Install and configure Red Hat Quay on a single node using rootless podman containers
+
+  license: BSD-2-Clause
+
+  min_ansible_version: 2.11
+  platforms:
+  - name: RedHat
+    versions:
+    - 8
+
+  galaxy_tags:
+    - quay
+    - redhat
+    - registry
+
+dependencies: []
