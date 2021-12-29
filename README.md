@@ -85,7 +85,7 @@ Example Playbook
 
     - hosts: registry
       roles:
-         - role: jharmison_redhat/redhat-quay-all-in-one
+         - role: jharmison_redhat/redhat_quay
            vars:
              redhat_username: jharmison
              redhat_password: some super secure password
