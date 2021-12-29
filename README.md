@@ -38,7 +38,7 @@ _The public hostname of the registry (important for certificates!)_
 
     password_dir: '{{ playbook_dir }}/.passwords'
 
-_The directory in which to save generated passwords. Optional if overriding registry_storage_details below._
+_The directory in which to save generated passwords._
 
     registry_s3_region: us-east-2
 
@@ -46,7 +46,7 @@ _The default AWS S3 region to use for object storage. Optional if overriding reg
 
     registry_s3_bucket: quay
 
-_The name of the S3 bucket to use for object storage._
+_The name of the S3 bucket to use for object storage. Optional if overriding registry_storage_details below._
 
     registry_storage_type: S3Storage
     registry_storage_details:
