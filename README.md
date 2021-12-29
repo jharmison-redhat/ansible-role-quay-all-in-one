@@ -13,10 +13,6 @@ Python dependencies:
 - cryptography
     - (for advanced X.509 certificate work)
 
-Ansible Collections:
-
-See [meta/requirements.yml](meta/requirements.yml).
-
 Role Variables
 --------------
 
@@ -42,11 +38,11 @@ _The directory in which to save generated passwords._
 
     registry_s3_region: us-east-2
 
-_The default AWS S3 region to use for object storage. Optional if overriding registry_storage_details below._
+_The AWS S3 region to use for object storage. Optional if overriding registry_storage_details below._
 
     registry_s3_bucket: quay
 
-_The name of the S3 bucket to use for object storage. Optional if overriding registry_storage_details below._
+_The name of the existing S3 bucket to use for object storage. Optional if overriding registry_storage_details below._
 
     registry_storage_type: S3Storage
     registry_storage_details:
@@ -78,6 +74,8 @@ _The container images to use. Note that registry.redhat.io requires login._
 Dependencies
 ------------
 
+See [meta/requirements.yml](meta/requirements.yml).
+
 - ansible.posix - Needed to set sysctls for unprivileged ports
 - containers.podman - Needed to manage container instances and logins
 - community.crypto - Needed to generate x509 certificates and requests for LetsEncrypt
@@ -85,11 +83,17 @@ Dependencies
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
+    - hosts: registry
       roles:
-         - { role: username.rolename, x: 42 }
+         - role: jharmison_redhat/redhat-quay-all-in-one
+           vars:
+             redhat_username: jharmison
+             redhat_password: some super secure password
+             registry_admin:
+               username: james
+               password: a different super secure password
+               email: jharmison@redhat.com
+             registry_hostname: quay.jharmison.net
 
 License
 -------
