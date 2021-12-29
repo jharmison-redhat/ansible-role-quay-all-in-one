@@ -13,6 +13,10 @@ Python dependencies:
 - cryptography
     - (for advanced X.509 certificate work)
 
+Ansible Collections:
+
+See [meta/requirements.yml](meta/requirements.yml).
+
 Role Variables
 --------------
 
