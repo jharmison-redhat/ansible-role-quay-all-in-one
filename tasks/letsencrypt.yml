@@ -10,7 +10,7 @@
 
 - name: Make sure account exists and agree to ToS
   become: true
-  become_user: '{{ cert_owner|default(omit) }}'
+  become_user: quay
   community.crypto.acme_account:
     acme_directory: https://acme-v02.api.letsencrypt.org/directory
     acme_version: 2
@@ -22,7 +22,7 @@
 
 - name: Generate LetsEncrypt private key
   become: true
-  become_user: '{{ cert_owner|default(omit) }}'
+  become_user: quay
   community.crypto.openssl_privatekey:
     path: '{{ cert_directory }}/ssl.key'
     owner: '{{ cert_owner|default(omit) }}'
@@ -32,7 +32,7 @@
 
 - name: Generate LetsEncrypt certificate signing request
   become: true
-  become_user: '{{ cert_owner|default(omit) }}'
+  become_user: quay
   community.crypto.openssl_csr:
     path: '{{ cert_directory }}/ssl.csr'
     privatekey_path: '{{ cert_directory }}/ssl.key'
@@ -45,7 +45,7 @@
 
 - name: Generate LetsEncrypt challenge from CSR
   become: true
-  become_user: '{{ cert_owner|default(omit) }}'
+  become_user: quay
   community.crypto.acme_certificate:
     acme_directory: https://acme-v02.api.letsencrypt.org/directory
     acme_version: 2
@@ -89,7 +89,7 @@
 
 - name: Let the challenge be validated and retrieve the cert and intermediate certificate
   become: true
-  become_user: '{{ cert_owner|default(omit) }}'
+  become_user: quay
   community.crypto.acme_certificate:
     acme_directory: https://acme-v02.api.letsencrypt.org/directory
     acme_version: 2
@@ -104,7 +104,7 @@
 
 - name: Migrate the fullchain into place
   become: true
-  become_user: '{{ cert_owner|default(omit) }}'
+  become_user: quay
   copy:
     remote_src: yes
     src: '{{ cert_directory }}/ssl.cert.fullchain'
