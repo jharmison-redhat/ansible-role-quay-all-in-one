@@ -22,6 +22,7 @@
     cert_mode: '0666'
 
 - name: Template prep script
+  become: true
   template:
     src: quay_postgres_start.sh.j2
     dest: /home/quay/quay_postgres_start.sh
@@ -31,6 +32,7 @@
     setype: container_file_t
 
 - name: Template Quay configuration
+  become: true
   template:
     src: quay_config.j2
     dest: /home/quay/config/config.yaml
@@ -40,6 +42,7 @@
     mode: '0666'
 
 - name: Drop Quay healthcheck scripts
+  become: true
   copy:
     src: '{{ role_path }}/files/{{ item }}'
     dest: /home/quay/{{ item }}
@@ -52,6 +55,7 @@
   - healthcheck.sh
 
 - name: Template Quay container units
+  become: true
   template:
     src: container.service.j2
     dest: /home/quay/.config/systemd/user/container-{{ container.key }}.service

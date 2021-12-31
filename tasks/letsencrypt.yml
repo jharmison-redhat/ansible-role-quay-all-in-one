@@ -1,5 +1,6 @@
 ---
 - name: Generate LetsEncrypt private account key
+  become: true
   community.crypto.openssl_privatekey:
     path: '{{ cert_directory }}/account.key'
     owner: '{{ cert_owner|default(omit) }}'
@@ -8,6 +9,8 @@
     mode: '{{ cert_mode|default(omit) }}'
 
 - name: Make sure account exists and agree to ToS
+  become: true
+  become_user: '{{ cert_owner|default(omit) }}'
   community.crypto.acme_account:
     acme_directory: https://acme-v02.api.letsencrypt.org/directory
     acme_version: 2
@@ -18,6 +21,8 @@
     - mailto:{{ admin_email|default("admin@" + registry_hostname) }}
 
 - name: Generate LetsEncrypt private key
+  become: true
+  become_user: '{{ cert_owner|default(omit) }}'
   community.crypto.openssl_privatekey:
     path: '{{ cert_directory }}/ssl.key'
     owner: '{{ cert_owner|default(omit) }}'
@@ -26,6 +31,8 @@
     mode: '{{ cert_mode|default(omit) }}'
 
 - name: Generate LetsEncrypt certificate signing request
+  become: true
+  become_user: '{{ cert_owner|default(omit) }}'
   community.crypto.openssl_csr:
     path: '{{ cert_directory }}/ssl.csr'
     privatekey_path: '{{ cert_directory }}/ssl.key'
@@ -37,6 +44,8 @@
     mode: '{{ cert_mode|default(omit) }}'
 
 - name: Generate LetsEncrypt challenge from CSR
+  become: true
+  become_user: '{{ cert_owner|default(omit) }}'
   community.crypto.acme_certificate:
     acme_directory: https://acme-v02.api.letsencrypt.org/directory
     acme_version: 2
@@ -47,6 +56,7 @@
   register: certificate_challenge
 
 - name: Prepare the challenge answer directory
+  become: true
   file:
     path: /var/www/html/{{ certificate_challenge['challenge_data'][registry_hostname]['http-01']['resource']|dirname }}
     state: directory
@@ -55,6 +65,7 @@
   - registry_hostname in certificate_challenge['challenge_data']
 
 - name: Prepare the challenge answer
+  become: true
   copy:
     dest: /var/www/html/{{ certificate_challenge['challenge_data'][registry_hostname]['http-01']['resource'] }}
     content: "{{ certificate_challenge['challenge_data'][registry_hostname]['http-01']['resource_value'] }}"
@@ -64,6 +75,7 @@
   - registry_hostname in certificate_challenge['challenge_data']
 
 - name: Manage the challenge container
+  become: true
   containers.podman.podman_container:
     name: acme-challenge
     image: docker.io/library/nginx:latest
@@ -76,6 +88,8 @@
   - registry_hostname in certificate_challenge['challenge_data']
 
 - name: Let the challenge be validated and retrieve the cert and intermediate certificate
+  become: true
+  become_user: '{{ cert_owner|default(omit) }}'
   community.crypto.acme_certificate:
     acme_directory: https://acme-v02.api.letsencrypt.org/directory
     acme_version: 2
@@ -89,6 +103,8 @@
   - registry_hostname in certificate_challenge['challenge_data']
 
 - name: Migrate the fullchain into place
+  become: true
+  become_user: '{{ cert_owner|default(omit) }}'
   copy:
     remote_src: yes
     src: '{{ cert_directory }}/ssl.cert.fullchain'
@@ -98,3 +114,8 @@
     setype: '{{ cert_setype|default("container_file_t") }}'
     mode: '{{ cert_mode|default(omit) }}'
 
+- name: Tear down challenge container
+  become: true
+  containers.podman.podman_container:
+    name: acme-challenge
+    state: absent

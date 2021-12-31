@@ -13,6 +13,7 @@
     uid: '{{ quay_uid }}'
 
 - name: Template prep script
+  become: true
   template:
     src: clair_postgres_start.sh.j2
     dest: /home/quay/clair_postgres_start.sh
@@ -22,6 +23,7 @@
     setype: container_file_t
 
 - name: Template Clair configuration
+  become: true
   template:
     src: clair_config.yml.j2
     dest: /home/quay/clair-config/config.yml
@@ -30,6 +32,7 @@
     setype: container_file_t
 
 - name: Template Clair Postgres configuration
+  become: true
   template:
     src: clair_postgres_config.conf.j2
     dest: /home/quay/clair_postgres_config.conf
@@ -38,6 +41,7 @@
     setype: container_file_t
 
 - name: Template Clair container units
+  become: true
   template:
     src: container.service.j2
     dest: /home/quay/.config/systemd/user/container-{{ container.key }}.service

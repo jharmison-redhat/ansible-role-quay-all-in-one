@@ -67,6 +67,7 @@
     xdg_runtime_dir: /run/user/{{ getent_passwd["quay"][1]|default("noop") }}
 
 - name: Ensure user run directory exists for Quay
+  become: true
   file:
     path: '{{ xdg_runtime_dir }}'
     state: directory
