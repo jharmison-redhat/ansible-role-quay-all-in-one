@@ -6,10 +6,13 @@
     state: directory
     owner: '{{ item.uid }}'
     group: quay
+    mode: '0770'
     setype: container_file_t
   loop:
   - dir: postgres
     uid: '{{ pg_uid }}'
+  - dir: config
+    uid: '{{ quay_uid }}'
   - dir: config/extra_ca_certs
     uid: '{{ quay_uid }}'
 
