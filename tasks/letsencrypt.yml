@@ -1,4 +1,14 @@
 ---
+- name: Ensure directory exists
+  become: true
+  file:
+    path: '{{ cert_directory }}'
+    state: directory
+    owner: '{{ cert_owner|default(omit) }}'
+    group: '{{ cert_group|default(omit) }}'
+    setype: '{{ cert_setype|default("container_file_t") }}'
+    mode: '{{ cert_mode|default(omit) }}'
+
 - name: Generate LetsEncrypt private account key
   become: true
   community.crypto.openssl_privatekey:
@@ -10,7 +20,6 @@
 
 - name: Make sure account exists and agree to ToS
   become: true
-  become_user: quay
   community.crypto.acme_account:
     acme_directory: https://acme-v02.api.letsencrypt.org/directory
     acme_version: 2
@@ -22,7 +31,6 @@
 
 - name: Generate LetsEncrypt private key
   become: true
-  become_user: quay
   community.crypto.openssl_privatekey:
     path: '{{ cert_directory }}/ssl.key'
     owner: '{{ cert_owner|default(omit) }}'
@@ -32,7 +40,6 @@
 
 - name: Generate LetsEncrypt certificate signing request
   become: true
-  become_user: quay
   community.crypto.openssl_csr:
     path: '{{ cert_directory }}/ssl.csr'
     privatekey_path: '{{ cert_directory }}/ssl.key'
@@ -45,7 +52,6 @@
 
 - name: Generate LetsEncrypt challenge from CSR
   become: true
-  become_user: quay
   community.crypto.acme_certificate:
     acme_directory: https://acme-v02.api.letsencrypt.org/directory
     acme_version: 2
@@ -89,7 +95,6 @@
 
 - name: Let the challenge be validated and retrieve the cert and intermediate certificate
   become: true
-  become_user: quay
   community.crypto.acme_certificate:
     acme_directory: https://acme-v02.api.letsencrypt.org/directory
     acme_version: 2
@@ -103,7 +108,6 @@
   - registry_hostname in certificate_challenge['challenge_data']
 
 - name: Migrate the fullchain into place
-  become: true
   copy:
     remote_src: yes
     src: '{{ cert_directory }}/ssl.cert.fullchain'
