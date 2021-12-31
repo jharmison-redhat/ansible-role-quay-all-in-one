@@ -108,6 +108,7 @@
   - registry_hostname in certificate_challenge['challenge_data']
 
 - name: Migrate the fullchain into place
+  become: true
   copy:
     remote_src: yes
     src: '{{ cert_directory }}/ssl.cert.fullchain'
