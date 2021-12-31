@@ -7,7 +7,7 @@
     owner: '{{ cert_owner|default(omit) }}'
     group: '{{ cert_group|default(omit) }}'
     setype: '{{ cert_setype|default("container_file_t") }}'
-    mode: '{{ cert_mode|default(omit) }}'
+    mode: '0770'
 
 - name: Generate LetsEncrypt private account key
   become: true
