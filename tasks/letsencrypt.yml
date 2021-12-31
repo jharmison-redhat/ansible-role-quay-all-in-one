@@ -104,7 +104,6 @@
 
 - name: Migrate the fullchain into place
   become: true
-  become_user: quay
   copy:
     remote_src: yes
     src: '{{ cert_directory }}/ssl.cert.fullchain'
