@@ -1,14 +1,4 @@
 ---
-- name: Ensure directory exists
-  become: true
-  file:
-    path: '{{ cert_directory }}'
-    state: directory
-    owner: '{{ cert_owner|default(omit) }}'
-    group: '{{ cert_group|default(omit) }}'
-    setype: '{{ cert_setype|default("container_file_t") }}'
-    mode: '0770'
-
 - name: Generate LetsEncrypt private account key
   become: true
   community.crypto.openssl_privatekey:
@@ -27,7 +17,7 @@
     state: present
     terms_agreed: yes
     contact:
-    - mailto:{{ admin_email|default("admin@" + registry_hostname) }}
+    - mailto:{{ registry_admin.email|default("admin@" + registry_hostname) }}
 
 - name: Generate LetsEncrypt private key
   become: true

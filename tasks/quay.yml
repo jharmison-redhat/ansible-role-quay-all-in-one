@@ -17,7 +17,7 @@
     uid: '{{ quay_uid }}'
 
 - name: Install certs
-  include_tasks: letsencrypt.yml
+  include_tasks: certs/{{ cert_style }}.yml
   vars:
     cert_directory: /home/quay/config
     cert_owner: '{{ quay_uid }}'
