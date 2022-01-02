@@ -23,6 +23,8 @@ redhat_password: <some password>
 
 _Undefaulted variables for logging in to registry.redhat.io, required for the official Red Hat Quay images._
 
+---
+
 ```yaml
 registry_admin:
   username: quay
@@ -32,11 +34,15 @@ registry_admin:
 
 _The username, password, and email of the admin user to be created for the registry._
 
+---
+
 ```yaml
 registry_hostname: registry.example.com
 ```
 
 _The public hostname of the registry (important for certificates!)_
+
+---
 
 ```yaml
 password_dir: '{{ playbook_dir }}/.passwords'
@@ -44,17 +50,23 @@ password_dir: '{{ playbook_dir }}/.passwords'
 
 _The directory in which to save generated passwords._
 
+---
+
 ```yaml
 registry_s3_region: us-east-2
 ```
 
 _The AWS S3 region to use for object storage. Optional if overriding registry_storage_details below._
 
+---
+
 ```yaml
 registry_s3_bucket: quay
 ```
 
 _The name of the existing S3 bucket to use for object storage. Optional if overriding registry_storage_details below._
+
+---
 
 ```yaml
 registry_storage_type: S3Storage
@@ -66,17 +78,23 @@ registry_storage_path: /datastorage/registry
 
 _The storage configuration for the instance. For more information on how this might impact the storage configuration of your Quay instance, please use the config validator (or at least browse [the code](https://github.com/quay/config-tool/blob/redhat-3.6/pkg/lib/fieldgroups/distributedstorage/distributedstorage.go) for the appropriate version to understand the constraints). Note that this configuration assumes an instanceprofile that enables the instance to access the bucket!_
 
+---
+
 ```yaml
 deploy_clair: true
 ```
 
 _Whether or not to deploy the Clair image scanner._
 
+---
+
 ```yaml
 do_redhat_login: true
 ```
 
 _Whether to log in to registry.redhat.io, as required for official Red Hat Quay release images._
+
+---
 
 ```yaml
 cert_style: letsencrypt
@@ -88,6 +106,8 @@ _Which cert style to use for the registry, options from:_
   - _byo_
   - _selfsigned_
 
+---
+
 ```yaml
 registry_certificate: ""
 registry_certificate_key: ""
@@ -95,11 +115,15 @@ registry_certificate_key: ""
 
 _When using BYO cert style, the PEM-encoded certificate and private key respectively._
 
+---
+
 ```yaml
 quay_version: "3.6.2"
 ```
 
 _The version of Red Hat Quay to deploy - note, only tested on the 3.6 release._
+
+---
 
 ```yaml
 quay_image: registry.redhat.io/quay/quay-rhel8:v{{ quay_version }}
