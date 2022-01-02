@@ -4,8 +4,6 @@ registry_admin:
   password: password
   email: quay@example.com
 
-registry_hostname: registry.example.com
-
 password_dir: '{{ playbook_dir }}/.passwords'
 
 registry_s3_region: us-east-2
@@ -20,6 +18,10 @@ registry_storage_path: /datastorage/registry
 deploy_clair: true
 
 do_redhat_login: true
+
+cert_style: letsencrypt
+registry_certificate: ""
+registry_certificate_key: ""
 
 quay_version: "3.6.2"
 
