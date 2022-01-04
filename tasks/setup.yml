@@ -10,10 +10,11 @@
     name: '@container-tools'
     state: installed
 
-- name: Ensure password directory exists
+- name: Ensure that local password directory exists
   file:
     path: '{{ password_dir }}'
     state: directory
+  delegate_to: localhost
 
 - name: Enable unprivileged binding to port 443 and up
   become: true
