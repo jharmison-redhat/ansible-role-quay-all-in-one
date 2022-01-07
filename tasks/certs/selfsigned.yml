@@ -34,6 +34,8 @@
     group: '{{ cert_group|default(omit) }}'
     setype: '{{ cert_setype|default("container_file_t") }}'
     mode: '{{ cert_mode|default(omit) }}'
+    return_content: yes
+  register: selfsigned_certificate
 
 - name: Copy certificate to the CA anchors folder
   become: true
